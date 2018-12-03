@@ -1,11 +1,12 @@
-FROM amazonlinux:latest
+# FROM amazonlinux:latest
+# FROM alpine:latest
+# FROM centos:latest
+FROM busybox:latest
 
-RUN yum -y install which unzip aws-cli
+ADD my-environment.sh /usr/local/bin/my-environment.sh
+RUN chmod +x          /usr/local/bin/my-environment.sh
 
-ADD my-environment.sh /usr/local/bin/
-
-WORKDIR /tmp
 USER nobody
+WORKDIR /tmp
 
 ENTRYPOINT ["/usr/local/bin/my-environment.sh"]
-
