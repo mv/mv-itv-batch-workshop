@@ -1,0 +1,11 @@
+#!/bin/bash
+# vim:ft=sh:
+#
+
+export AWS_ID=""
+export SQS_URL="https://sqs.${AWS_REGION}.amazonaws.com/${AWS_ID}/sqs-std-01"
+export SRC_BUCKET="${AWS_DEFAULT_PROFILE}-pic-01"
+export DST_BUCKET="${AWS_DEFAULT_PROFILE}-pic-01-resuts/mv-pdf"
+
+
+
