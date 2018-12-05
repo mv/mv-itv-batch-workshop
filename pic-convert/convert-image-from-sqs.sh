@@ -91,7 +91,7 @@ do
   fi
 
   echo
-  echo "Receipt:  [${sqs_rec:0:10}]"  # string 0:10
+  echo "Receipt:  [${sqs_rec:0:10}...]"  # string 0:10
   echo "img_loc:  [${img_loc}]"
   echo "img_file: [${img_file}]"
   echo "pdf_file: [${pdf_file}]"
