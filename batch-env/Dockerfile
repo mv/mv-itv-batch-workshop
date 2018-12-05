@@ -1,8 +1,8 @@
 # FROM fedora:latest
 # FROM centos:latest
+# FROM busybox:latest
 # FROM amazonlinux:latest
-# FROM alpine:latest
-FROM busybox:latest
+FROM alpine:latest
 
 LABEL maintainer="ferreira.mv@gmail.com"
 ENV REFRESHED_AT 2018-12-01
