@@ -99,7 +99,6 @@ do
 
 
   # Get image
-  set -x
   aws s3 cp "s3://${SRC_BUCKET}/${img_loc}" \
             "${tmp_dir}/${img_file}"
 
@@ -108,7 +107,6 @@ do
 
   # Put image
   aws s3 cp "${tmp_dir}/${pdf_file}" "s3://${DST_BUCKET}/${pdf_file}"
-  set +x
 
   # Cleanup
   del_item_from_sqs
