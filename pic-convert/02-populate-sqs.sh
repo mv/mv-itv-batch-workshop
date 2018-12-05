@@ -20,6 +20,9 @@ echo "SRC_BUCKET:[${SRC_BUCKET}]"
 echo "file_list: [${file_list}]"
 echo
 
+# ensure using sqs queue even from a different region
+sqs_region=$( echo $SQS_URL | awk -F. '{print $2}' )
+
 for f in $( cat ${file_list} )
 do
 
@@ -27,6 +30,7 @@ do
   aws sqs send-message      \
     --queue-url ${SQS_URL}  \
     --message-body "${f}"   \
+    --region ${sqs_region}  \
     --output json | grep -i messageid
   echo
 
