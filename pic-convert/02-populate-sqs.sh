@@ -22,11 +22,14 @@ for f in $( cat ${file_list} )
 do
 
   echo "File: [${f}]"
-  aws sqs send-message  \
+  aws sqs send-message      \
     --queue-url ${SQS_URL}  \
-    --message-body "s3://${SRC_BUCKET}/${f}" \
+    --message-body "${f}"   \
     --output json | grep -i messageid
   echo
+
+#
+#   --message-body "s3://${SRC_BUCKET}/${f}" \
 
 done
 
