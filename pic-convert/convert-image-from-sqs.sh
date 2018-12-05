@@ -2,11 +2,15 @@
 #
 # convert-image-from-sqs.sh
 #   - get one item from sqs
-#   - get image from source bucket
+#   - use item to get image from source bucket
 #   - convert to pdf
 #   - save pdf to dest bucket
 #   - delete message
 #
+
+###
+### external
+###
 
 [ -z "${SQS_URL}"   ] && {
   echo "env SQS_URL not defined."
@@ -31,6 +35,11 @@ echo "SRC_BUCKET: ${SRC_BUCKET}"
 echo "DST_BUCKET: ${DST_BUCKET}"
 echo
 
+#set -x
+
+###
+### local
+###
 tmp_dir="/tmp"
 sqs_msg="${tmp_dir}/sqs-message.json"
 sqs_rec=""
@@ -58,10 +67,6 @@ del_item_from_sqs() {
     --receipt-handle ${sqs_rec}
 }
 
-get_image() {
-  echo aws s3 cp
-
-}
 
 ###
 ### Main
@@ -105,4 +110,7 @@ do
 
 done
 
+echo
+echo "== End: $( date )"
+echo
 
