@@ -47,6 +47,7 @@ img_loc=""
 img_file=""
 pdf_file=""
 
+# ensure using sqs queue even from a different region
 sqs_region=$( echo $SQS_URL | awk -F. '{print $2}' )
 
 get_item_from_sqs() {
@@ -101,12 +102,13 @@ do
   set -x
   aws s3 cp "s3://${SRC_BUCKET}/${img_loc}" \
             "${tmp_dir}/${img_file}"
+
+  # ImageMagick: convert to pdf
   convert   "${tmp_dir}/${img_file}" "${tmp_dir}/${pdf_file}"
 
   # Put image
   aws s3 cp "${tmp_dir}/${pdf_file}" "s3://${DST_BUCKET}/${pdf_file}"
   set +x
-
 
   # Cleanup
   del_item_from_sqs
