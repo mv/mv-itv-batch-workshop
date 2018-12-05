@@ -47,11 +47,13 @@ img_loc=""
 img_file=""
 pdf_file=""
 
+sqs_region=$( echo $SQS_URL | awk -F. '{print $2}' )
 
 get_item_from_sqs() {
   aws sqs receive-message   \
     --queue-url ${SQS_URL}  \
     --output json           \
+    --region ${sqs_region}  \
     > ${sqs_msg}
 
   sqs_rec=$(cat ${sqs_msg} | jq '.Messages[0].ReceiptHandle' | sed -e 's/"//g')
@@ -64,6 +66,7 @@ get_item_from_sqs() {
 del_item_from_sqs() {
   aws sqs delete-message    \
     --queue-url ${SQS_URL}  \
+    --region ${sqs_region}  \
     --receipt-handle ${sqs_rec}
 }
 
@@ -97,6 +100,8 @@ do
   # Get image
   set -x
   aws s3 cp "s3://${SRC_BUCKET}/${img_loc}" \
+            "${tmp_dir}/${img_file}" || \
+  aws s3 cp "${img_loc}" \
             "${tmp_dir}/${img_file}"
   convert   "${tmp_dir}/${img_file}" "${tmp_dir}/${pdf_file}"
 
