@@ -12,6 +12,8 @@ file_list="../scripts/samples-list.txt"
 ### Main
 ###
 
+set -e
+
 echo
 echo "SQS_URL:   [${SQS_URL}]"
 echo "SRC_BUCKET:[${SRC_BUCKET}]"
