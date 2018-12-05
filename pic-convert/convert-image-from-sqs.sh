@@ -8,22 +8,41 @@
 #   - delete message
 #
 
-SQS_IMAGE=""
-SRC_BUCKET=""
-DST_BUCKET=""
-TMP_DIR="/tmp"
+[ -z "${SQS_URL}"   ] && {
+  echo "env SQS_URL not defined."
+  exit 1
+}
 
+[ -z "${SRC_BUCKET}" ] && {
+  echo "env SRC_BUCKET not defined."
+  exit 1
+}
+
+[ -z "${DST_BUCKET}" ] && {
+  echo "env DST_BUCKET not defined."
+  exit 1
+}
+
+echo
+echo "== Begin: $( date )"
+echo
+echo "SQS_URL   : ${SQS_URL}"
+echo "SRC_BUCKET: ${SRC_BUCKET}"
+echo "DST_BUCKET: ${DST_BUCKET}"
+echo
+
+tmp_dir="/tmp"
+sqs_msg="${tmp_dir}/sqs-message.json"
 sqs_rec=""
 img_loc=""
 img_file=""
 pdf_file=""
 
-sqs_msg="${TMP_DIR}/sqs-message.json"
 
 get_item_from_sqs() {
-  aws sqs receive-message \
-    --queue-url ${SQS}    \
-    --output json         \
+  aws sqs receive-message   \
+    --queue-url ${SQS_URL}  \
+    --output json           \
     > ${sqs_msg}
 
   sqs_rec=$(cat ${sqs_msg} | jq '.Messages[0].ReceiptHandle' | sed -e 's/"//g')
@@ -34,8 +53,8 @@ get_item_from_sqs() {
 }
 
 del_item_from_sqs() {
-  aws sqs delete-message  \
-    --queue-url ${SQS}    \
+  aws sqs delete-message    \
+    --queue-url ${SQS_URL}  \
     --receipt-handle ${sqs_rec}
 }
 
@@ -70,10 +89,15 @@ do
   echo
 
 
-  # Process
-  echo aws s3 cp ${img} ${TMP_DIR}/${img_file}
-  echo convert ${TMP_DIR}/${img_file} ${TMP_DIR}/${pdf_file}
-  echo aws s3 cp ${TMP_DIR}/${pdf_file} s3://${DST_BUCKET}/pdf/
+  # Get image
+  set -x
+  aws s3 cp "s3://${SRC_BUCKET}/${img_loc}" \
+            "${tmp_dir}/${img_file}"
+  convert   "${tmp_dir}/${img_file}" "${tmp_dir}/${pdf_file}"
+
+  # Put image
+  aws s3 cp "${tmp_dir}/${pdf_file}" "s3://${DST_BUCKET}/${pdf_file}"
+  set +x
 
 
   # Cleanup
