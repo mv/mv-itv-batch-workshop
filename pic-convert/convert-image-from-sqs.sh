@@ -100,8 +100,6 @@ do
   # Get image
   set -x
   aws s3 cp "s3://${SRC_BUCKET}/${img_loc}" \
-            "${tmp_dir}/${img_file}" || \
-  aws s3 cp "${img_loc}" \
             "${tmp_dir}/${img_file}"
   convert   "${tmp_dir}/${img_file}" "${tmp_dir}/${pdf_file}"
 
