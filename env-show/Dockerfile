@@ -7,11 +7,11 @@ FROM alpine:latest
 LABEL maintainer="ferreira.mv@gmail.com"
 ENV REFRESHED_AT 2018-12-01
 
-ADD my-environment.sh /usr/local/bin/my-environment.sh
-RUN chmod +x          /usr/local/bin/my-environment.sh
+ADD env-show.sh /usr/local/bin/env-show.sh
+RUN chmod +x    /usr/local/bin/env-show.sh
 
 USER nobody
 WORKDIR /tmp
 
-ENTRYPOINT ["/usr/local/bin/my-environment.sh"]
+CMD ["/usr/local/bin/env-show.sh"]
 
