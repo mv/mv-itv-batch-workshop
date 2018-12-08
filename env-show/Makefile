@@ -4,7 +4,7 @@
 # Docker: image name
 IMG=env-show
 
-# Docker Hub repo
+# DockerHub repo
 HUB=darthmv
 
 # AWS ECR repo
@@ -24,28 +24,40 @@ version:=$(shell cat version.txt )
 all: help
 
 help:
-	@echo
 	@echo "Docker: [${IMG}]"
-	@echo "    make vars    - Defined vars for [${IMG}]"
-	@echo "    make clean   - My cleanup"
-	@echo "    make build   - Run 'docker build'"
-	@echo "    make img     - Run 'docker images'"
-	@echo "    make push    - Run 'docker push' to ECR [${ECR}]"
-	@echo "    make hub     - Run 'docker push' to docker hub [${HUB}]"
-	@echo "    make run     - Run 'docker run -t -i ${IMG}'"
-	@echo "    make bash    - Run 'docker run -t -i ${IMG} /bin/bash'"
-	@echo "    make sh      - Run 'docker run -t -i ${IMG} /bin/sh'"
+	@echo
+	@echo "    make vars  - Defined vars for [${IMG}]"
+	@echo
+	@echo "    make build - Run 'docker build'"
+	@echo "    make img   - Run 'docker images' for [${IMG}]"
+	@echo "    make imgs  - Run 'docker images' for all"
+	@echo "    make tag   - Run 'docker tag' latest to [v${version}]"
+	@echo "    make tags  - Run 'docker tag' latest to ECR and DockerHub"
+	@echo
+	@echo "    make run   - Run 'docker run -t -i ${IMG}'"
+	@echo "    make sh    - Run 'docker run -t -i ${IMG} /bin/sh'"
+	@echo "    make bash  - Run 'docker run -t -i ${IMG} /bin/bash'"
+	@echo
+	@echo "    make ecr   - Run 'docker push' to ECR: [${ECR}:${IMG}]"
+	@echo "    make hub   - Run 'docker push' to DockerHub: [${HUB}/${IMG}]"
+	@echo
+	@echo "    make clean_imgs - Cleanup: remove local [${IMG}] images"
+	@echo "    make clean_tags - Cleanup: remove REMOTE tags"
+	@echo "    make clean      - Cleanup: remove local images and REMOTE tags"
+	@echo
 	@echo "    make ecr_create - ECR: Create repo for [${IMG}]"
 	@echo "    make ecr_login  - ECR: Login"
+	@echo
+	@echo "    make ver      - Current version: [${IMG}:v${version}]"
+	@echo "    make upver    - Current version + 1"
+	@echo "    make resetver - Reset version to [v0]"
+	@echo
 
 
 vars:
 	@echo "Container:  [${IMG}]"
 	@echo "AWS ECR:    [${ECR}]"
 	@echo "Docker Hub: [${HUB}]"
-
-clean:
-	@echo "TODO..."
 
 build:
 	docker build -t ${IMG} .
@@ -60,33 +72,58 @@ bash:
 	docker run -ti -e PS1='\u@\h:\w\n\\$$ ' ${IMG} /bin/bash
 
 img:
+	docker images | egrep "REPOSITORY|${IMG}"
+
+imgs:
 	docker images
 
 tag:
-	docker tag  ${IMG}:latest ${IMG}:v${version}
+	docker tag  ${IMG}:latest   ${IMG}:v${version}
+
+tags:
+	docker tag  ${IMG}:latest   ${IMG}:v${version}
+	@echo
+	docker tag  ${IMG}:v${version} ${ECR}/${IMG}:v${version}
+	docker tag  ${IMG}:v${version} ${HUB}/${IMG}:v${version}
+	docker tag  ${IMG}:latest ${ECR}/${IMG}:latest
+	docker tag  ${IMG}:latest ${HUB}/${IMG}:latest
 
 ecr:
-	docker tag  ${IMG}:v${version} ${ECR}:v${version}
-	docker tag  ${IMG}:latest      ${ECR}:latest
-	docker push ${ECR}:v${version}
-	docker push ${ECR}:latest
+	docker push ${ECR}/${IMG}:v${version}
+	docker push ${ECR}/${IMG}:latest
 
 hub:
-	docker tag  ${IMG}:v${version} ${HUB}:v${version}
-	docker tag  ${IMG}:latest      ${HUB}:latest
-	docker push ${HUB}:v${version}
-	docker push ${HUB}:latest
+	docker push ${HUB}/${IMG}:v${version}
+	docker push ${HUB}/${IMG}:latest
+
+clean_tags:
+	docker images --format "{{.ID}} {{.Repository}}:{{.Tag}}" \
+	    | egrep "${HUB}|${ECR}" \
+	    | cut -f2 -d ' '        \
+	    | sort                  \
+	    | xargs docker rmi
+
+clean_imgs:
+	docker images --format "{{.ID}} {{.Repository}}:{{.Tag}}" \
+	    | egrep "${IMG}"        \
+	    | cut -f2 -d ' '        \
+	    | sort                  \
+	    | xargs docker rmi -f
+
+clean:  clean_tags clean_imgs
+
 
 ver:
-	@echo "Version: [${IMG}:${version}]"
+	@echo "Current version: [${IMG}:v${version}]"
 
 resetver:
-	@echo "Reset version to 0"
+	@echo "Version: v0. Done."
 	@echo 0 > version.txt
 
 upver:
-	@echo "version: ${version}"
-	echo $$(( $(version) + 1 )) > version.txt
+	@echo "UP Version... "
+	@echo $$(( $(version) + 1 )) > version.txt
+	@cat version.txt
 
 
 ecr_create:
