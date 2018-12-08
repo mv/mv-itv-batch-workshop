@@ -1,8 +1,7 @@
-
 # vim:ft=make:ts=8:sts=8:sw=8:noet:tw=80:nowrap:list
 
 # Docker: image name
-IMG=populate-sqs
+IMG=img-convert-to-pdf
 
 # DockerHub repo
 HUB=darthmv
