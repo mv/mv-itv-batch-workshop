@@ -52,4 +52,5 @@ log/
 __pycache__/
 
 # This project
+version.txt
 
