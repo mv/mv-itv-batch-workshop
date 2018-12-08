@@ -133,3 +133,29 @@ ecr_create:
 ecr_login:
 	aws ecr get-login --no-include-email --region ${AWS_REGION} | bash
 
+test_file:
+	docker run -ti \
+	  -e SQS_URL=${SQS_URL} \
+	  -e FILE_LIST="../scripts/samples-list.txt" \
+	  -e JOB_NODES="20" \
+	  -e AWS_BATCH_JOB_ARRAY_INDEX=11 \
+	  -e AWS_REGION="us-east-1" \
+	  -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+	  -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+	  -v ~/work/dev/itv/mv-itv-batch-workshop/scripts:/scripts \
+	  ${IMG}
+
+test_s3:
+	docker run -ti \
+	  -e SQS_URL=${SQS_URL} \
+	  -e FILE_LIST="s3://internal-mv-pic-01/samples-list.txt" \
+	  -e JOB_NODES="20" \
+	  -e AWS_BATCH_JOB_ARRAY_INDEX=14 \
+	  -e AWS_REGION="us-east-1" \
+	  -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+	  -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+	  ${IMG}
+
+test_http:
+	echo "Todo..."
+
