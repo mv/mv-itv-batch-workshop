@@ -133,6 +133,14 @@ ecr_create:
 ecr_login:
 	aws ecr get-login --no-include-email --region ${AWS_REGION} | bash
 
+test_script:
+	SQS_URL=${SQS_URL} \
+	FILE_LIST="../scripts/samples-list.txt" \
+	JOB_NODES="20" \
+	AWS_BATCH_JOB_ARRAY_INDEX=11 \
+	AWS_REGION="us-east-1" \
+	./${IMG}.sh
+
 test_file:
 	docker run -ti \
 	  -e SQS_URL=${SQS_URL} \
