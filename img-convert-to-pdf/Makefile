@@ -130,5 +130,5 @@ ecr_create:
 	--region ${AWS_REGION}
 
 ecr_login:
-	aws ecr get-login --no-include-email --region ${AWS_REGION} | bash
+	aws ecr get-login --no-include-email --region ${AWS_REGION} | bash 2>/dev/null
 
