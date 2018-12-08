@@ -1,8 +1,7 @@
-
 # vim:ft=make:ts=8:sts=8:sw=8:noet:tw=80:nowrap:list
 
 # Docker: image name
-IMG=populate-sqs
+IMG=img-add-to-sqs
 
 # DockerHub repo
 HUB=darthmv
@@ -131,7 +130,7 @@ ecr_create:
 	--region ${AWS_REGION}
 
 ecr_login:
-	aws ecr get-login --no-include-email --region ${AWS_REGION} | bash
+	aws ecr get-login --no-include-email --region ${AWS_REGION} | bash 2>/dev/null
 
 test_script:
 	SQS_URL=${SQS_URL} \
