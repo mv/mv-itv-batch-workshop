@@ -118,19 +118,21 @@ echo
 
 kount=${n_start}
 echo
-echo "== SQS"
+echo "== SQS: Begin: $( date '+%Y-%m-%dT%H:%M:%S%z' )"
 
 for f in $( sed -n "${n_start},${n_final} p" ${file_dest} )
 do
 
-  echo "-- File: ${kount} [${f}]"
-  aws sqs send-message      \
-    --queue-url ${SQS_URL}  \
-    --message-body "${f}"   \
-    --region ${sqs_region}  \
-    --output json | grep -v MD5OfMessageBody
-  echo
+  msg_id=$( aws sqs send-message      \
+              --queue-url ${SQS_URL}  \
+              --message-body "${f}"   \
+              --region ${sqs_region}  \
+              --output text | cut -f2 )
+
+  echo "-- File ${kount}: [${msg_id}] [${f}] "
   kount=$(( ${kount} + 1 ))
 
 done
+
+echo "== SQS: End: $( date '+%Y-%m-%dT%H:%M:%S%z' )"
 
