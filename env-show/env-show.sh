@@ -14,5 +14,6 @@ echo
 env | sort
 
 echo
-echo "END:   $(date ${dt_fmt})"
+echo "END: $(date ${dt_fmt})"
 echo
+
