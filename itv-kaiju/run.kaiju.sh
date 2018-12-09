@@ -37,6 +37,8 @@ if [ "${OUTPUT}" == "0" ]
 then echo "Error: KAIJU_ARGS must be defined." && exit 5
 fi
 
+[ "${DEBUG}" ] && echo "--- Debug"
+
 ###
 ### Get any file: http(s)/ftp/path
 ###
@@ -49,12 +51,20 @@ copy_file() {
   # substring(0,4)
   case ${file_src:0:4} in
       'http'|'ftp:')
-              echo curl -s "${file_src}" > "${file_dst}"
-              res="$?"
+              if [ "${DEBUG}" ]
+              then echo curl -s "${file_src}" > "${file_dst}"
+                        res="0"
+              else      curl -s "${file_src}" > "${file_dst}"
+                        res="$?"
+              fi
               ;;
       's3:/')
-              echo aws s3 cp "${file_src}" "${file_dst}"
-              res="$?"
+              if [ "${DEBUG}" ]
+              then echo aws s3 cp "${file_src}" "${file_dst}"
+                        res="0"
+              else      aws s3 cp "${file_src}" "${file_dst}"
+                        res="$?"
+              fi
               ;;
       *)
               if [ -f "${file_src}" ]
@@ -99,13 +109,15 @@ set -e
 echo
 echo "== Kaiju: Begin: $( date '+%Y-%m-%dT%H:%M:%S%z' )"
 
-echo kaiju -t "${tmp_nodes}" -n "${tmp_names}" -i "${tmp_input}" -o "${tmp_output}" "${KAIJU_ARGS}"
-echo kaiju \
+if [ "${DEBUG}" ]
+then echo kaiju -t "${tmp_nodes}" -n "${tmp_names}" -i "${tmp_input}" -o "${tmp_output}" "${KAIJU_ARGS}"
+else kaiju \
    -t "${tmp_nodes}"  \
    -n "${tmp_names}"  \
    -i "${tmp_input}"  \
    -o "${tmp_output}" \
    "${KAIJU_ARGS}"
+fi
 
 echo "== Kaiju: End: $( date '+%Y-%m-%dT%H:%M:%S%z' )"
 echo
@@ -117,7 +129,10 @@ echo
 if [ "${OUTPUT:0:2}" == "s3" ]
 then
   echo "-- S3 copy: Begin: $( date '+%Y-%m-%dT%H:%M:%S%z' )"
-  echo aws s3 cp "${tmp_output}" "${OUTPUT}"
+  if [ "${DEBUG}" ]
+  then echo aws s3 cp "${tmp_output}" "${OUTPUT}"
+  else      aws s3 cp "${tmp_output}" "${OUTPUT}"
+  fi
   echo "-- S3 copy: End: $( date '+%Y-%m-%dT%H:%M:%S%z' )"
 else
   echo "-- S3 copy: not needed."

@@ -151,6 +151,7 @@ kaiju_git:
 
 test_script1:
 	@mkdir -p /tmp/data && touch /tmp/data/{nodes,names,input}.file && \
+	DEBUG=1 \
 	NODES="/tmp/data/nodes.file" \
 	NAMES="/tmp/data/names.file" \
 	INPUT="/tmp/data/input.file" \
@@ -160,6 +161,7 @@ test_script1:
 
 test_script2:
 	@mkdir -p /tmp/data && touch /tmp/data/{nodes,names,input}.file && \
+	DEBUG=1 \
 	NODES="s3://bucket/data/nodes.file" \
 	NAMES="s3://bucket/data/names.file" \
 	INPUT="s3://bucket/data/input.file" \
