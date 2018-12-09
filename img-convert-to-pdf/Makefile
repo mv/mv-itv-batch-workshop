@@ -132,3 +132,14 @@ ecr_create:
 ecr_login:
 	aws ecr get-login --no-include-email --region ${AWS_REGION} | bash 2>/dev/null
 
+
+test_s3:
+	docker run -ti \
+	  -e SQS_URL=${SQS_URL} \
+	  -e SRC_BUCKET="s3://internal-mv-pic-01"   \
+	  -e DST_BUCKET="s3://itv-workshop-test-01" \
+	  -e AWS_REGION="us-east-1" \
+	  -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+	  -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+	  ${IMG}
+

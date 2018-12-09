@@ -99,14 +99,14 @@ do
 
 
   # Get image
-  aws s3 cp "s3://${SRC_BUCKET}/${img_loc}" \
+  aws s3 cp "${SRC_BUCKET}/${img_loc}" \
             "${tmp_dir}/${img_file}"
 
   # ImageMagick: convert to pdf
   convert   "${tmp_dir}/${img_file}" "${tmp_dir}/${pdf_file}"
 
   # Put image
-  aws s3 cp "${tmp_dir}/${pdf_file}" "s3://${DST_BUCKET}/${pdf_file}"
+  aws s3 cp "${tmp_dir}/${pdf_file}" "${DST_BUCKET}/${pdf_file}"
 
   # Cleanup
   del_item_from_sqs
