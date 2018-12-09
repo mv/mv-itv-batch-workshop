@@ -149,3 +149,22 @@ kaiju_get_bin:
 kaiju_git:
 	git clone https://github.com/bioinformatics-centre/kaiju.git
 
+test_script1:
+	@mkdir -p /tmp/data && touch /tmp/data/{nodes,names,input}.file && \
+	NODES="/tmp/data/nodes.file" \
+	NAMES="/tmp/data/names.file" \
+	INPUT="/tmp/data/input.file" \
+	OUTPUT="/tmp/data/output.file" \
+	KAIJU_ARGS="-v -x 1 -y 2"  \
+	bash ./run.kaiju.sh
+
+test_script2:
+	@mkdir -p /tmp/data && touch /tmp/data/{nodes,names,input}.file && \
+	NODES="s3://bucket/data/nodes.file" \
+	NAMES="s3://bucket/data/names.file" \
+	INPUT="s3://bucket/data/input.file" \
+	OUTPUT="s3://bucket/data/output.file" \
+	KAIJU_ARGS="-v -x 1 -y 2"  \
+	bash ./run.kaiju.sh
+
+
