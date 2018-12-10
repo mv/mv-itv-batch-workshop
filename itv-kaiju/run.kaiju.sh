@@ -22,19 +22,19 @@ then echo "Error: KAIJU_ARGS must be defined." && exit 1
 fi
 
 if [ "${NODES}" == "0" ]
-then echo "Error: KAIJU_ARGS must be defined." && exit 2
+then echo "Error: NODES must be defined." && exit 2
 fi
 
 if [ "${NAMES}" == "0" ]
-then echo "Error: KAIJU_ARGS must be defined." && exit 3
+then echo "Error: NAMES must be defined." && exit 3
 fi
 
 if [ "${INPUT}" == "0" ]
-then echo "Error: KAIJU_ARGS must be defined." && exit 4
+then echo "Error: INPUT must be defined." && exit 4
 fi
 
 if [ "${OUTPUT}" == "0" ]
-then echo "Error: KAIJU_ARGS must be defined." && exit 5
+then echo "Error: OUTPUT must be defined." && exit 5
 fi
 
 [ "${DEBUG}" ] && echo "--- Debug"
