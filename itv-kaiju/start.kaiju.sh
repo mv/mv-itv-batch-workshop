@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-# run.kaiju.sh
-#   - kaiju parameters as environment variables
+# start.kaiju.sh
+#   - kaiju parameters as environment variables, inside docker
+#   - if files are remote, make a local work copy
 #
 
 # FOO=${VARIABLE:-default}  # If variable not set or null, use default.
