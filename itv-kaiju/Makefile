@@ -158,7 +158,7 @@ test_script1:
 	INPUT="/tmp/data/input.file" \
 	OUTPUT="/tmp/data/output.file" \
 	KAIJU_ARGS="-v -x 1 -y 2"  \
-	bash ./run.kaiju.sh
+	bash ./start.kaiju.sh
 
 test_script2:
 	@echo "Mock: s3 files"
@@ -169,6 +169,6 @@ test_script2:
 	INPUT="s3://bucket/data/input.file" \
 	OUTPUT="s3://bucket/data/output.file" \
 	KAIJU_ARGS="-v -x 1 -y 2"  \
-	bash ./run.kaiju.sh
+	bash ./start.kaiju.sh
 
 
