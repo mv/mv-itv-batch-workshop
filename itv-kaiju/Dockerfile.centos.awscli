@@ -17,9 +17,9 @@ ENV PATH=/kaiju/bin:/usr/local/bin:/usr/bin:/bin
 ENV PS1='\u@\h:\w\n\$ '
 
 # run: takes care for parameters
-ADD run.kaiju.sh /usr/local/bin/run.kaiju.sh
-RUN chmod +x     /usr/local/bin/run.kaiju.sh
+ADD start.kaiju.sh /usr/local/bin/start.kaiju.sh
+RUN chmod +x       /usr/local/bin/start.kaiju.sh
 
 WORKDIR /tmp
-CMD ["/kaiju/bin/kaiju","-v"]
+CMD ["/usr/local/bin/start.kaiju.sh"]
 
