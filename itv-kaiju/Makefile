@@ -150,6 +150,7 @@ kaiju_git:
 	git clone https://github.com/bioinformatics-centre/kaiju.git
 
 test_script1:
+	@echo "Mock: local files"
 	@mkdir -p /tmp/data && touch /tmp/data/{nodes,names,input}.file && \
 	DEBUG=1 \
 	NODES="/tmp/data/nodes.file" \
@@ -160,6 +161,7 @@ test_script1:
 	bash ./run.kaiju.sh
 
 test_script2:
+	@echo "Mock: s3 files"
 	@mkdir -p /tmp/data && touch /tmp/data/{nodes,names,input}.file && \
 	DEBUG=1 \
 	NODES="s3://bucket/data/nodes.file" \
