@@ -66,10 +66,10 @@ run:
 	docker run -t -i ${IMG}
 
 sh:
-	docker run -ti -e PS1='\u@\h:\w\n\\$$ ' ${IMG} /bin/sh
+	docker run -ti -e PS1='\u@\h:\w\n\$$ ' ${IMG} /bin/sh
 
 bash:
-	docker run -ti -e PS1='\u@\h:\w\n\\$$ ' ${IMG} /bin/bash
+	docker run -ti -e PS1='\u@\h:\w\n\$$ ' ${IMG} /bin/bash
 
 img:
 	docker images | egrep "REPOSITORY|${IMG}"
