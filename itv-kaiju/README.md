@@ -20,6 +20,31 @@ The smallest container was created from the most recent binaries provided by the
     itv-kaiju   v1-amazonlinux          880606df7856        About an hour ago   188MB
     itv-kaiju   v1-centos               96a9c586cfc1        About an hour ago   227MB
 
+## Build
+
+To build the Docker image:
+
+    $ make vars             # check defined 'vars' to build this image
+    $ make kaiju_get_bin    # download binaries
+    $ make build            # build docker container
+    $ make tag              # add 'v1' to latest
+    $ make img              # list built images
+    $ make imgs             # list all local images
+    $ make sh               # test: run the container with '/bin/sh'
+
+To send the image to a repository:
+
+    $ make tags             # add 'v1' to remote repos
+    $ make ecr              # push to 'ECR' repo (if created)
+    $ make hub              # push to 'Docker Hub' repo (if exists)
+
+To create an Amazon ECR repository:
+
+    $ make ecr_create       # create 'repo:img' in the defined AWS account
+    $ make ecr_login        # ECR login
+    $ make ecr              # docker push to ECR repo
+
+
 ## Usage
 
 To execute Kaiju inside the contaner a `start.kaiju.sh` script was created.
