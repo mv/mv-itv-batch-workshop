@@ -102,8 +102,8 @@ do
   aws s3 cp "${SRC_BUCKET}/${img_loc}" \
             "${tmp_dir}/${img_file}"
 
-  # ImageMagick: convert to pdf
-  convert   "${tmp_dir}/${img_file}" "${tmp_dir}/${pdf_file}"
+  # convert
+  img2pdf   "${tmp_dir}/${img_file}" -o "${tmp_dir}/${pdf_file}"
 
   # Put image
   aws s3 cp "${tmp_dir}/${pdf_file}" "${DST_BUCKET}/${pdf_file}"
